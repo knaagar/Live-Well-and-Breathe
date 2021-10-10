@@ -1,0 +1,186 @@
+[
+  {
+    "issue": "Diabetes",
+    "food": [
+      {
+        "name": "Leafy vegetables",
+        "imp": ["Vitamin C", "Low Calories", "Minerals"] 
+      },
+      {
+        "name": "Avacados",
+        "imp": ["Healthy Fats", "Low Sugar"]
+      },
+      {
+        "name": "Eggs",
+        "imp": ["Decrease Inflammation", "Increase Insulin Sensitivity", "Increase your HDL"]
+      },
+      {
+        "name": "Chia Seeds",
+        "imp": ["High in Fiber", "Help Moderate Weight"]
+      },
+      {
+        "name": "Beans",
+        "imp": ["Affordable", "Super-healthy", "Vitamin B", "Calcium", "Potassium", "Magnesium"]
+      }
+    ]
+  },
+  {
+    "issue": "Arthritis Pain",
+    "food": [
+      {
+        "name": "Green tea",
+        "imp": ["Have Anit-oxidents", "Reduce Inflammation"] 
+      },
+      {
+        "name": "Berries",
+        "imp": ["Have Anit-oxidents", "Provide arthritis-fighting power"]
+      },
+      {
+        "name": "Ginger",
+        "imp": ["Anti-inflammatory"]
+      },
+      {
+        "name": "Nuts",
+        "imp": ["High in Protein", "Low in Saturated Fats", "No cholestrol"]
+      },
+      {
+        "name": "Salsa",
+        "imp": ["Vitamin C", "Fiber", "Have Anit-oxidents"]
+      }
+    ]
+  },
+  {
+    "issue": "Covid-19",
+    "food": [
+      {
+        "name": "Whole Grains, Lentils",
+        "imp": ["High in Protein", "Helps in recovery"] 
+      },
+      {
+        "name": "Green Leafy Vegetables",
+        "imp": ["Build Immunity", "Have Bio-active compounds"]
+      },
+      {
+        "name": "Fluids",
+        "imp": ["Hydrates body"]
+      },
+      {
+        "name": "Chicken and Eggs",
+        "imp": ["Great source of protein", "Helps in recovery"]
+      },
+      {
+        "name": "Lemons, Oranges, Gooseberry",
+        "imp": ["Rich in citric acid", "Helps in building immunity"]
+      }
+    ]
+  },
+  {
+    "issue": "Weight loss",
+    "food": [
+      {
+        "name": "Whole Eggs",
+        "imp": ["High in protein and fat", "Incredibly Nutrient Dense"] 
+      },
+      {
+        "name": "Leafy Greens",
+        "imp": ["Low in Calories", "Loaded with Fiber"]
+      },
+      {
+        "name": "Salmon",
+        "imp": ["High Quality Protein", "Healthy Fats"]
+      },
+      {
+        "name": "Boiled Potatoes",
+        "imp": ["High in potassium", "Make you feel full and you will eat less"]
+      },
+      {
+        "name": "Beans and Legumes",
+        "imp": ["High in protein and fibre", "Contain resistant starch"]
+      }
+    ]
+  },
+  {
+    "issue": "Weight Gain",
+    "food": [
+      {
+        "name": "Homemade Protein Smoothies",
+        "imp": ["Highly Nutritious", "Quick way to gain weight"] 
+      },
+      {
+        "name": "Milk",
+        "imp": ["Muscle Builder", "Good balance of proteins, carbs and fats"]
+      },
+      {
+        "name": "Rice",
+        "imp": ["Low cost carb source", "Calorie-dense"]
+      },
+      {
+        "name": "Nuts and nut butters",
+        "imp": ["Calorie-dense", "Easy to add to diet"]
+      },
+      {
+        "name": "Oily Fish",
+        "imp": ["Great source of protein", "Conta"]
+      }
+    ]
+  },
+  {
+    "issue": "",
+    "food": [
+      {
+        "name": "",
+        "imp": [] 
+      },
+      {
+        "name": "",
+        "imp": []
+      },
+      {
+        "name": "",
+        "imp": []
+      },
+      {
+        "name": "",
+        "imp": []
+      },
+      {
+        "name": "",
+        "imp": []
+      }
+    ]
+  }
+
+  
+]
+
+/*
+
+Skeletal Format:
+
+{
+    "issue": "",
+    "food": [
+      {
+        "name": "",
+        "imp": [] 
+      },
+      {
+        "name": "",
+        "imp": []
+      },
+      {
+        "name": "",
+        "imp": []
+      },
+      {
+        "name": "",
+        "imp": []
+      },
+      {
+        "name": "",
+        "imp": []
+      }
+    ]
+  }
+
+*/
