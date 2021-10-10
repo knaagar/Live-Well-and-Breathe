@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="icon" type="image/jpg" href="/resources/images/favicon.jpg" />
+	<link href="/styles/dashboard.css" rel="stylesheet" type="text/css" />
+	<title>Sleep track</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js">
+	</script>
+  <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+  <script src="https://vitalets.github.io/combodate/momentjs/moment.min.2.5.0.js"></script>
+  <script src="https://vitalets.github.io/combodate/combodate.js"></script>
+	<script>
+	  $(function(){
+        $("#importNavbar").load(document.cookie ? "/resources/navbar2.html" : "/resources/navbar1.html"); 
+        $("#importFooter").load("/resources/footer.html");
+        $("#importSidebar").load("/resources/sidebar.html", onnavLoad);
+      });
+	</script>
+</head>
+
+<body>
+
+  
+  <div id = "importSidebar"></div>
+  <div class="top-nav-thingy">
+    <span id = "top-name">Name</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class='bx bxs-bell'></span>&nbsp;&nbsp;&nbsp;
+  </div> 
+  <div class="content">
+    
+    <h1>Dashboard - Sleep Tracker</h1>
+    <br><br>
+    <div class="grid-el">
+    <div class="bcards">
+      <p>Your age is <span id="h"></span></p>
+    </div>
+    <div class="bcards">
+      <p>You are in <span id="type" class="cb"></span> Category</p>
+    </div>
+    </div>
+    <br>
+    <div class="grid-el">
+      <div>
+
+  <div>
+    <div>
+
+      <div>
+
+        <h2>Wake Up Time</h2><br>
+
+        <p>Select the time you want to wake up.</p><br>
+
+        <input class="time-input" data-customClass="form-control" type="text" id="sleepcalc" data-format="h:mm a" data-template="hh : mm a" name="datetime" value="7:00 am">
+
+      </div>
+
+    </div>
+
+    <div>
+
+      <br><h2>So, You Should Go To Bed At:</h2><br>
+
+      <div>
+        <div>
+          <h3 id="result1"></h3>
+          <p>This gives you 9 hours of sleep.</p>
+        </div>
+<br>
+        <div>
+          <h3 id="result2"></h3>
+          <p>This gives you 7.5 hours of sleep</p>
+        </div>
+<br>
+        <div>
+          <h3 id="result3"></h3>
+          <p>This gives you 6 hours of sleep.</p>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+    </div>
+    <br><br>
+    <table>
+  <tr>
+    <th>Age (years)</th>
+    <th>Category</th>
+    <th>Required</th>
+  </tr>
+  <tr>
+    <td>1-2</td>
+    <td>Toddlers</td>
+    <td>11-14 hours</td>
+  </tr>
+  <tr>
+    <td>3-5</td>
+    <td>Preschoolers</td>
+    <td>10-13 hours</td>
+  </tr>
+  <tr>
+    <td>6-12</td>
+    <td>School-aged children</td>
+    <td>9-11 hours</td>
+  </tr>
+  <tr>
+    <td>13-17</td>
+    <td>Teenagers</td>
+    <td>8-10 hours</td>
+  </tr>
+  <tr>
+    <td>18-25</td>
+    <td>Young adults</td>
+    <td>7-9 hours</td>
+  </tr>
+  <tr>
+    <td>26-64</td>
+    <td>Adults</td>
+    <td>7-9 hours</td>
+  </tr><tr>
+    <td>65+</td>
+    <td>Older adults</td>
+    <td>7-8 hours</td>
+  </tr>
+</table>
+
+    <!-- <div id="app">
+     </div> -->
+  </div>
+
+  
+  <script src="/scripts/dst.js"></script>
+</body>
+</html>

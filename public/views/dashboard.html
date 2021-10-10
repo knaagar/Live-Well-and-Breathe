@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="icon" type="image/jpg" href="/resources/images/favicon.jpg" />
+	<link href="/styles/dashboard.css" rel="stylesheet" type="text/css" />
+	<title>Dashboard</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js">
+	</script>
+  <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+	<script>
+	  $(function(){
+        $("#importNavbar").load(document.cookie ? "/resources/navbar2.html" : "/resources/navbar1.html"); 
+        $("#importFooter").load("/resources/footer.html");
+        $("#importSidebar").load("/resources/sidebar.html", onnavLoad);
+      });
+	</script>
+</head>
+
+<body>
+
+    
+  <div id = "importSidebar"></div>
+  <div class="top-nav-thingy">
+    <span id="top-name">Name</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class='bx bxs-bell'></span>&nbsp;&nbsp;&nbsp;
+  </div>
+  <div class="content">
+    
+    <h1>Dashboard</h1>
+    
+    <br><br>
+    <div v-if="!loading" id="app">
+      <div v-if="loading" class="center">
+      <div id="loader">
+        <h1>LOADING...</h1>
+      </div>
+      
+      </div>
+      <div id="appl">
+      <h2 style="text-align:center;">Quote Of The Day!</h2>
+      <br>
+      <div @click="newQuote()" class="bcards" style="background-color:#7e3af2;cursor:default;padding:40px;" title="Click to get more :)">
+        
+        <h2>{{ quote }}</h2>
+        {{ person }}
+      </div>
+      <br><br>
+      <h2>Tools</h2><br>
+      
+      <div class="grid-el-2">
+        <div class="bcards" v-for="tool in tools">
+          <i v-bind:class="tool.class" v-bind:style="tool.styling"></i>
+          <a v-bind:href="tool.link"><h2>{{ tool.name }}</h2> </a>
+          <p>{{ tool.des }}</p>
+         
+        </div>
+      </div>
+      <br><br>
+      <h2>Goal To-dos</h2>
+      <br>
+      <div class="grid-el">
+      <a class="bcards" v-for="goal in filterGoals" :href="goal.url">
+        <h2>{{ goal.title }}</h2>
+        <p>{{ goal.desc }}</p>
+        <span v-if="goal.title != 'Create a goal!'">Completed = {{ goal.completed }}</span>
+      </a>
+      <div class="bcards">
+        <p>Total goals</p>
+        <h2 class="cb" id="goals"></h2>
+        <p>Completed</p>
+        <h2 class="cb" id="complete-goals"></h2>
+      </div>
+      </div>
+     <br><br>
+     <h2>Have you slept enough today?</h2>
+     <br>
+     <div class="grid-el-2">
+     <div class="bcards">
+       <h2>Go and check now: <a href="/pages/sleep-track"><strong>Daily Sleep Tracker</strong></a></h2>
+     </div>
+     <div class="bcards">
+       <p>You are </p>
+       <h2 class="cb"><span id="age"></span> Years Old </h2>
+     </div>
+     </div>
+     <br><br>
+     <h2>Recommended Articles</h2>
+     <br>
+     <div class="grid-el">
+       
+     <div class="bcards cb" v-for="x in articles">
+      
+      <a v-bind:href="x.link"><h2> <i v-bind:class='x.class' v-bind:style='x.styling'></i> <br><br>#{{ x.type.toUpperCase() }} </h2>
+      </a>
+     </div>
+     </div>
+     <br><br>
+     <h2>Meditate a moment.</h2>
+     <br>
+     <div class="grid-el">
+       
+     <div class="bcards cb">
+      <a href="/pages/meditate">
+      <h2>Meditate for one minute and this can improve your daily life. </h2>
+      </a>
+     </div>
+     </div>
+     
+    </div>
+    </div>
+    <br><br><br>
+  </div>
+  <script>
+      function onnavLoad() {
+        window.navbar = document.querySelector(".sidebar");
+        window.closeBtn = document.querySelector("#btn");
+        window.searchBtn = document.querySelector(".bx-search");
+
+        closeBtn.addEventListener("click", () => {
+          navbar.classList.toggle("open");
+          menuBtnChange();
+        });
+
+        searchBtn.addEventListener("click", () => {
+          navbar.classList.toggle("open");
+          menuBtnChange();
+        });
+        menuBtnChange = function() {
+          if (navbar.classList.contains("open")) {
+            closeBtn.classList.replace("bx-menu", "bx-menu-alt-right");
+          } else {
+            closeBtn.classList.replace("bx-menu-alt-right", "bx-menu");
+          }
+        }
+      }
+
+      let topName = document.getElementById("top-name");
+      let a = document.getElementById("age");
+      let numberocg = document.getElementById("complete-goals");
+      let ng = document.getElementById("goals");
+
+      fetch("/api/user")
+      .then(response => response.json())
+      .then(data => {
+          topName.textContent = data.name;
+          a.textContent = data.age;
+          
+          // why is this returning 2 to me ? It should return 1
+          // you want it to return completed goals, right?
+          let dl = data.goals.filter(e => e.completed);
+          console.log(dl);
+
+          numberocg.textContent = dl.length;
+          ng.textContent = data.goals.length;
+      });
+      
+
+  </script>
+
+  <script src="/scripts/vue.js"></script>
+</body>
+</html>

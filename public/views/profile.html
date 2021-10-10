@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="icon" type="image/jpg" href="/resources/images/favicon.jpg" />
+	<link href="/styles/dashboard.css" rel="stylesheet" type="text/css" />
+	<title>Profile</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js">
+
+	</script>
+	<link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+	<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js">
+
+	</script>
+	<!-- <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.4.0/dist/confetti.browser.min.js"></script> -->
+	<script>
+		$(function(){
+        $("#importNavbar").load(document.cookie ? "/resources/navbar2.html" : "/resources/navbar1.html"); 
+        $("#importFooter").load("/resources/footer.html");
+        $("#importSidebar").load("/resources/sidebar.html", onnavLoad);
+      });
+	</script>
+</head>
+
+<body>
+
+
+	<div id="importSidebar"></div>
+	<div class="top-nav-thingy">
+		<span id = "top-name">Name</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class='bx bxs-bell'></span>&nbsp;&nbsp;&nbsp;
+  </div>
+  <div class="content" id="app" v-if="!loading">
+    <div v-if="loading" class="center">
+      <div id="loader">
+        <h1>LOADING...</h1>
+      </div>
+        </div>
+    <h1>Profile</h1>
+    <br><br>
+    <div class="grid-el">
+    <div>
+      <svg width="400" height="400"
+  xmlns="http://www.w3.org/2000/svg">
+            <image href="/resources/svg/avatar.svg" height="400" width="400"/>
+        </svg>
+      </div>
+      <!--  -->
+      <div>
+        <h1>Hey <span class="cb" id="nameish"></span>!</h1>
+        <br><br>
+        <div class="grid-el-3">
+            <div class="profile-cards">
+              <p>You joined on</p>
+              <h1 class="cb"><span id="createdate"></span></h1>
+            </div>
+            <br> 
+              <div class="profile-cards">
+              <p>Your email is</p>
+              <h1 class="cb"><span id="mail" class="cb"></h1>
+            </div>
+            <br>
+            <div class="grid-el-2">
+              <div class="profile-cards">
+              <p>Your age is</p>
+              <h1 class="cb"><span id="aget" class="cb"></h1>
+            </div>
+            <div class="profile-cards">
+              <p>Total Goals</p>
+              <h1 class="cb"><span id="gn" class="cb"></h1>
+            </div>
+            </div>
+            <br><br>
+          <h1>Keep track of your goals: <br> <a href="/pages/tools" class="blue-a">Goals and Tools</a></h1>
+          <br><br>
+          <h1>Create a new goal: <br> <a href="/pages/create-goal" class="blue-a">New Goal</a></h1>
+          <br><br>
+          <h1><a href="/pages/profile/settings" class="blue-a">Settings</a></h1>
+            </div>
+        
+      </div>
+  </div>
+  </div>
+  <script>
+      function onnavLoad() {
+        window.navbar = document.querySelector(".sidebar");
+        window.closeBtn = document.querySelector("#btn");
+        window.searchBtn = document.querySelector(".bx-search");
+
+        closeBtn.addEventListener("click", () => {
+          navbar.classList.toggle("open");
+          menuBtnChange();
+        });
+
+        searchBtn.addEventListener("click", () => {
+          navbar.classList.toggle("open");
+          menuBtnChange();
+        });
+        menuBtnChange = function() {
+          if (navbar.classList.contains("open")) {
+            closeBtn.classList.replace("bx-menu", "bx-menu-alt-right");
+          } else {
+            closeBtn.classList.replace("bx-menu-alt-right", "bx-menu");
+          }
+        }
+      }
+
+      let topName = document.getElementById("top-name");
+      let name2 = document.getElementById("nameish");
+      let date = document.getElementById("createdate");
+      let mail = document.getElementById("mail");
+      let age = document.getElementById("aget");
+      let gn = document.getElementById("gn");
+
+      fetch("/api/user")
+      .then(response => response.json())
+      .then(data => {
+          topName.textContent = data.name;
+          name2.textContent = data.name;
+          date.textContent = data.created.split("T")[0];
+          mail.textContent = data.email;
+          age.textContent = data.age;
+          gn.textContent = data.goals.length;
+      });
+ 
+  </script>
+
+  <script src="/scripts/vue.js"></script>
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="icon" type="image/jpg" href="/resources/images/favicon.jpg" />
+	<link href="/styles/dashboard.css" rel="stylesheet" type="text/css" />
+	<title>Articles - Browse</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js">
+	</script>
+  <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+	<script>
+	  $(function(){
+        $("#importNavbar").load(document.cookie ? "/resources/navbar2.html" : "/resources/navbar1.html"); 
+        $("#importFooter").load("/resources/footer.html");
+        $("#importSidebar").load("/resources/sidebar.html", onnavLoad);
+      });
+	</script>
+</head>
+
+<body>
+
+
+  <div id = "importSidebar"></div>
+  <div class="top-nav-thingy">
+    <span id = "top-name">Name</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class='bx bxs-bell'></span>&nbsp;&nbsp;&nbsp;
+  </div>
+  <div class="content">
+    
+    <h1>Articles</h1>
+    <br><br>
+    
+    <div id="app" v-if="!loading">
+      <div v-if="loading" class="center">
+      <div id="loader">
+        <h1>LOADING...</h1>
+      </div>
+        </div>
+      <h2>#Basic</h2>
+    <br>
+      <div class="container">
+  <main class="grid">
+    <article v-for="art in articles" v-if="art.type === 'basic'">
+      <div>
+      <img v-bind:src="art.src" alt="Image">
+      <div class="text">
+        <h3>{{ art.title }}</h3>
+        <p>{{ art.p }}</p>
+        <br>
+        <a v-bind:href="art.linked" class="btn btn-primary btn-block">Read more</a>
+      </div>
+      </div>
+    </article>
+  </main>
+</div>
+
+<br><br>
+ <h2 id="covid">#Covid19</h2>
+    <br>
+      <div class="container">
+  <main class="grid">
+    <article v-for="art in articles" v-if="art.type === 'covid'">
+      <div>
+      <img v-bind:src="art.src" alt="Image">
+      <div class="text">
+        <h3>{{ art.title }}</h3>
+        <p>{{ art.p }}</p>
+        <br>
+        <a v-bind:href="art.linked" class="btn btn-primary btn-block">Read more</a>
+      </div>
+      </div>
+    </article>
+  </main>
+</div>
+
+<br><br>
+ <h2 id="sc">#Self-care</h2>
+    <br>
+      <div class="container">
+  <main class="grid">
+    <article v-for="art in articles" v-if="art.type === 'self-care'">
+      <div>
+      <img v-bind:src="art.src" alt="Image">
+      <div class="text">
+        <h3>{{ art.title }}</h3>
+        <p>{{ art.p }}</p>
+        <br>
+        <a v-bind:href="art.linked" class="btn btn-primary btn-block">Read more</a>
+      </div>
+      </div>
+    </article>
+  </main>
+</div>
+
+
+    </div>
+ 
+  </div>
+  <script>
+      function onnavLoad() {
+        window.navbar = document.querySelector(".sidebar");
+        window.closeBtn = document.querySelector("#btn");
+        window.searchBtn = document.querySelector(".bx-search");
+
+        closeBtn.addEventListener("click", () => {
+          navbar.classList.toggle("open");
+          menuBtnChange();
+        });
+
+        searchBtn.addEventListener("click", () => {
+          navbar.classList.toggle("open");
+          menuBtnChange();
+        });
+        menuBtnChange = function() {
+          if (navbar.classList.contains("open")) {
+            closeBtn.classList.replace("bx-menu", "bx-menu-alt-right");
+          } else {
+            closeBtn.classList.replace("bx-menu-alt-right", "bx-menu");
+          }
+        }
+      }
+
+      let topName = document.getElementById("top-name");
+
+      fetch("/api/user")
+      .then(response => response.json())
+      .then(data => {
+          topName.textContent = data.name;
+          
+      });
+      
+
+  </script>
+
+  
+  <script src="/scripts/vue.js"></script>
+</body>
+</html>

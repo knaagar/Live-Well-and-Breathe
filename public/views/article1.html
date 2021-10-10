@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="icon" type="image/jpg" href="/resources/images/favicon.jpg" />
+	<link href="/styles/style.css" rel="stylesheet" type="text/css" />
+  	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js">
+
+	</script>
+  <title>Article 1</title>
+  <script>
+	  $(function(){
+        $("#importNavbar").load(document.cookie ? "/resources/navbar2.html" : "/resources/navbar1.html"); 
+        $("#importFooter").load("/resources/footer.html");
+      });
+	</script>
+</head>
+<body>
+  
+  <div class="top-land" id="art1-land">
+		<div class="left-div">
+			<h1 class="text-str">How to use this <span class="typed-text">website</span>?</h1>
+      </div>
+  </div>
+  
+  <div class="white-container">
+    <br><br>
+    <article>
+    This website is pretty easy to use. Just explore and click the things and you are ready. 
+    <br><br>
+    <div class="center">
+    1. Login and SignUp buttons are present at the top - login or signup with these buttons.
+    <br><br>
+    <img src="/resources/images/btn-ss.png" alt="ls" width="500">
+    <br><br>
+    2. After logging or signing , you will get your dashboard ready.
+    <br><br>
+    <img src="/resources/images/db-ss.png" alt="ls" width="500">
+    <br><br>
+    3. Easy Sidebar on the dashboard to navigate.
+    <br><br>
+    <img src="/resources/images/easynav-ss.png" alt="ls" width="500">
+    <br><br>
+    4. Easy navigation on the homepage after logging in.
+    <br><br>
+    <img src="/resources/images/lin-ss.png" alt="ls" width="500">
+    <br><br>
+    
+    5. Keep track of your goals and use awesome tools.
+    <br><br>
+    
+    <img src="/resources/images/tool.png" alt="ls" width="500">
+    </div>
+    <br><br>
+    <a href="/pages/dashboard">Back to Dashboard</a>
+    <br><br><br><br>
+    </article>
+  </div>
+  <script src="/scripts/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/jpg" href="/resources/images/favicon.jpg" />
+    <link href="/styles/style.css" rel="stylesheet" type="text/css" />
+    <link href="/styles/dashboard.css" rel="stylesheet" type="text/css" />
+    <title>New Goal</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js">
+    </script>
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script>
+      $(function(){
+          $("#importNavbar").load(document.cookie ? "/resources/navbar2.html" : "/resources/navbar1.html"); 
+          $("#importFooter").load("/resources/footer.html");
+          $("#importSidebar").load("/resources/sidebar.html", onnavLoad);
+        });
+    </script>
+  </head>
+
+  <body>
+
+
+    <div id = "importSidebar"></div>
+    <div class="top-nav-thingy">
+      <span id = "top-name">Name</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class='bx bxs-bell'></span>&nbsp;&nbsp;&nbsp;
+    </div>
+    <div class="content">
+      
+      <h1 id="fireclick">Create a Goal</h1>
+      <br><br>
+      <div v-if="!loading" id="app">
+        <div v-if="loading" class="center">
+      <div id="loader">
+        <h1>LOADING...</h1>
+      </div>
+        </div>
+        <form action = "/api/new-goal" method = "POST" enctype = "multipart/form-data" class = "forms new-goal">
+          <input type = "text" name = "title" placeholder = "Title"><br><br>
+          <input type = "text" name = "desc" placeholder = "Description">
+          <input type = "number" name = "urgency" placeholder = "Priority level">
+          <input type = "datetime-local" name = "completeBy" id = "completeBy" onfocus="this.min=new Date().toISOString().split('T')[0]" placeholder = "Complete by">
+          <div class="center-div">
+           
+            <button style="margin-top:5vh;">Create goal</button>
+          </div>
+        </form>
+        <div class="center">
+          <svg width="400" height="400"
+    xmlns="http://www.w3.org/2000/svg">
+              <image href="/resources/svg/indoor.svg" height="400" width="400"/>
+          </svg>
+        </div>        
+      </div>
+    </div>
+    <script>
+      function onnavLoad() {
+        window.navbar = document.querySelector(".sidebar");
+        window.closeBtn = document.querySelector("#btn");
+        window.searchBtn = document.querySelector(".bx-search");
+
+        closeBtn.addEventListener("click", () => {
+          navbar.classList.toggle("open");
+          menuBtnChange();
+        });
+
+        searchBtn.addEventListener("click", () => {
+          navbar.classList.toggle("open");
+          menuBtnChange();
+        });
+        menuBtnChange = function() {
+          if (navbar.classList.contains("open")) {
+            closeBtn.classList.replace("bx-menu", "bx-menu-alt-right");
+          } else {
+            closeBtn.classList.replace("bx-menu-alt-right", "bx-menu");
+          }
+        }
+      }
+
+      let topName = document.getElementById("top-name");
+
+      fetch("/api/user")
+      .then(response => response.json())
+      .then(data => {
+          topName.textContent = data.name;
+      });
+
+      const form = document.querySelector("form");
+      let date = document.querySelector("#completeBy");
+
+      form.onsubmit = e => {
+        let data = new FormData(form),
+            title = data.get("title"),
+            completeBy = data.get("completeBy"),
+            desc = data.get("desc"),
+            urgency = data.get("urgency");
+
+        if(!title || !completeBy || !desc || !urgency) {
+          e.preventDefault();
+        } else {
+          let d = date.value;
+          date.type = "text";
+          date.value = new Date(d);
+        }
+      };
+    </script>
+    <script src="/scripts/vue.js"></script>
+  </body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/jpg" href="/resources/images/favicon.jpg" />
+	<link href="/styles/style.css" rel="stylesheet" type="text/css" />
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css" rel="stylesheet">
+  <title>LWAB - SignUp</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+  <div class="bg-form">
+  <div class="card-forms" id="card-form-2">
+  <div class="form-content">
+  <form action = "/api/sign-up" method = "POST" enctype = "multipart/form-data">
+  <h1>We are happy to see you join!</h1>
+    <input type = "email" name = "email" placeholder = "Email">
+    <input type = "text" name = "name" placeholder = "Name">
+    <input type = "password" name = "password" placeholder = "Password">
+    <input type = "password" name = "confirmPassword" placeholder = "Confirm password">
+    <input type = "number" name = "age" placeholder = "Age">
+    <p id = "error"></p>
+    <div class="center-div">
+    <button class="form-btn" >Submit</button>
+    </div>
+  </form>
+  </div>
+  </div>
+  <script src="/scripts/script.js"></script>
+  <script>
+    const form = document.querySelector("form");
+    const error = document.querySelector("#error");
+
+    form.onsubmit = e => {
+      let data = new FormData(form),
+          email = data.get("email"),
+          name = data.get("name"),
+          password = data.get("password"),
+          confirmPassword = data.get("confirmPassword"),
+          age = data.get("age");
+
+      if(email && name && password && confirmPassword && age) {
+        if(!email.match(/[a-z0-9!#$%&'*+/=?^_\`{|}~-]+(?:\.[a-z0-9!#$%&\'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/)) {
+          // invalid email
+          e.preventDefault();
+          error.textContent = "Invalid email";
+        } else if(password !== confirmPassword) {
+          // nonmatching passwords
+          e.preventDefault();
+          error.textContent = "Passwords do not match";
+        } else if(!/[A-Z].*[A-Z]/.test(password)) {
+          // not enough capitals
+          e.preventDefault();
+          error.textContent = "Password must contain at least 2 uppercase letters";
+        } else if(!/[0-9].*[0-9]/.test(password)) {
+          // not enough digits
+          e.preventDefault();
+          error.textContent = "Password must contain at least 2 digits";
+        } else if(password.length < 8) {
+          // short password
+          e.preventDefault();
+          error.textContent = "Password must be at least 8 characters long";
+        }
+      } else {
+          e.preventDefault();
+          error.textContent = "Please fill all inputs";
+      }
+    };
+  </script>
+</body>
+</html>

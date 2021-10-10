@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="icon" type="image/jpg" href="/resources/images/favicon.jpg" />
+	<link href="/styles/dashboard.css" rel="stylesheet" type="text/css" />
+	<title>Goals & Tools</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js">
+	</script>
+  <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+	<script>
+	  $(function(){
+        $("#importNavbar").load(document.cookie ? "/resources/navbar2.html" : "/resources/navbar1.html"); 
+        $("#importFooter").load("/resources/footer.html");
+        $("#importSidebar").load("/resources/sidebar.html", onnavLoad);
+      });
+	</script>
+</head>
+
+<body>
+
+
+  <div id = "importSidebar"></div>
+  <div class="top-nav-thingy">
+    <span id = "top-name">Name</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class='bx bxs-bell'></span>&nbsp;&nbsp;&nbsp;
+  </div>
+  <div class="content">
+    <div id="app" v-if="!loading">
+      <div v-if="loading" class="center">
+      <div id="loader">
+        <h1>LOADING...</h1>
+      </div>
+        </div>
+      <h1>Your Goals and Tools</h1>
+
+      <br><br>
+      <h2>Goals</h2><br>
+      <div class="grid-el-2">
+
+      <div class="bcards" v-for="g in goals" v-if="g.title != 'Create a goal!'" v-bind:class="[g.completed ? 'done' : 'left']">
+        <a v-bind:href="g.url">
+        <h2>{{ g.title }}</h2>
+        <p> {{g.desc}} </p>
+        <br>
+        <h2 v-if="g.completed">Completed!</h2>
+        <h2 v-if="!g.completed">Not yet completed.</h2>
+        </a>
+      </div>
+      </div>
+      <br>
+      <a class="blue-a" style="font-size:1.5em;" href="/pages/create-goal">Create a Goal!</a>
+      <br><br>
+      <h2>Tools</h2><br>
+      
+      <div class="grid-el-2">
+        <div class="bcards" v-for="tool in tools">
+          <i v-bind:class="tool.class" v-bind:style="tool.styling"></i>
+          <a v-bind:href="tool.link"><h2>{{ tool.name }}</h2> </a>
+          <p>{{ tool.des }}</p>
+         
+        </div>
+      </div>
+    </div>
+  </div>
+ 
+  <script>
+      function onnavLoad() {
+        window.navbar = document.querySelector(".sidebar");
+        window.closeBtn = document.querySelector("#btn");
+        window.searchBtn = document.querySelector(".bx-search");
+
+        closeBtn.addEventListener("click", () => {
+          navbar.classList.toggle("open");
+          menuBtnChange();
+        });
+
+        searchBtn.addEventListener("click", () => {
+          navbar.classList.toggle("open");
+          menuBtnChange();
+        });
+        menuBtnChange = function() {
+          if (navbar.classList.contains("open")) {
+            closeBtn.classList.replace("bx-menu", "bx-menu-alt-right");
+          } else {
+            closeBtn.classList.replace("bx-menu-alt-right", "bx-menu");
+          }
+        }
+      }
+
+      let topName = document.getElementById("top-name");
+      let g = document.getElementById("g");
+      
+
+      fetch("/api/user")
+      .then(response => response.json())
+      .then(data => {
+          topName.textContent = data.name;
+        
+      });
+  </script>
+
+  <script src="/scripts/vue.js"></script>
+</body>
+</html>

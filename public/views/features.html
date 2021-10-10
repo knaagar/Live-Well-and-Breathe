@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/jpg" href="/resources/images/favicon.jpg" />
+	<link href="/styles/style.css" rel="stylesheet" type="text/css" />
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css" rel="stylesheet">
+  <title>LWAB - Features</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script> 
+	  $(function(){
+        $("#importNavbar").load(document.cookie ? "/resources/navbar2.html" : "/resources/navbar1.html"); 
+        $("#importFooter").load("/resources/footer.html");
+      });
+    </script> 
+</head>
+<body>
+  <div id="importNavbar"></div>
+  <div class="top-land" id="features-land">
+		<div class="left-div">
+			<h1>We Provide <br><span class="typed-text"> Awesome Features</span><br>To You</h1>
+      </div>
+  </div>
+  <div class="white-container">
+<h1 style="text-align:center;">Features Slideshow </h1>
+    <br><br>
+      <!-- features slideshow -->
+<div class="slideshow-container">
+
+<div class="slides fade">
+  <div class="numbertext">1 / 10</div>
+  <img src="/resources/images/db-ss.png" style="width:100%">
+  <div class="text">Dashboard</div>
+</div>
+
+<div class="slides fade">
+  <div class="numbertext">2 / 10</div>
+  <img src="/resources/images/db-2.jpg" style="width:100%">
+  <div class="text">Dashboard</div>
+</div>
+<!-- /resources/images/ -->
+<div class="slides fade">
+  <div class="numbertext">3 / 10</div>
+  <img src="/resources/images/one-goal.png" style="width:100%">
+  <div class="text">Goal Page</div>
+</div>
+
+<div class="slides fade">
+  <div class="numbertext">4 / 10</div>
+  <img src="/resources/images/inspire.png" style="width:100%">
+  <div class="text">Inspire</div>
+</div>
+
+<div class="slides fade">
+  <div class="numbertext">5 / 10</div>
+  <img src="/resources/images/dst.jpg" style="width:100%">
+  <div class="text">Sleep Track</div>
+</div>
+
+<div class="slides fade">
+  <div class="numbertext">6 / 10</div>
+  <img src="/resources/images/art-ss.png" style="width:100%">
+  <div class="text">Articles</div>
+</div>
+
+<div class="slides fade">
+  <div class="numbertext">7 / 10</div>
+  <img src="/resources/images/create-g.png" style="width:100%">
+  <div class="text">Create Goal</div>
+</div>
+
+<div class="slides fade">
+  <div class="numbertext">8 / 10</div>
+  <img src="/resources/images/profile-ss.jpg" style="width:100%">
+  <div class="text">Profile</div>
+</div>
+
+<div class="slides fade">
+  <div class="numbertext">9 / 10</div>
+  <img src="/resources/images/tool2.png" style="width:100%">
+  <div class="text">Goals & Tools</div>
+</div>
+
+<div class="slides fade">
+  <div class="numbertext">10 / 10</div>
+  <img src="/resources/images/set.png" style="width:100%">
+  <div class="text">Settings</div>
+</div>
+
+
+<a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+<a class="next" onclick="plusSlides(1)">&#10095;</a>
+
+</div>
+<br>
+
+<div style="text-align:center">
+  <span class="dot" onclick="currentSlide(1)"></span> 
+  <span class="dot" onclick="currentSlide(2)"></span> 
+  <span class="dot" onclick="currentSlide(3)"></span> 
+  <span class="dot" onclick="currentSlide(4)"></span> 
+  <span class="dot" onclick="currentSlide(5)"></span> 
+  <span class="dot" onclick="currentSlide(6)"></span> 
+  <span class="dot" onclick="currentSlide(7)"></span> 
+  <span class="dot" onclick="currentSlide(8)"></span> 
+  <span class="dot" onclick="currentSlide(9)"></span> 
+  <span class="dot" onclick="currentSlide(10)"></span> 
+</div>
+
+    <br><br>
+  </div>
+  <div id="importFooter"></div>
+
+  <script>
+var slideIndex = 1;
+showSlides(slideIndex);
+
+function plusSlides(n) {
+  showSlides(slideIndex += n);
+}
+
+function currentSlide(n) {
+  showSlides(slideIndex = n);
+}
+
+function showSlides(n) {
+  var i;
+  var slides = document.getElementsByClassName("slides");
+  var dots = document.getElementsByClassName("dot");
+  if (n > slides.length) {slideIndex = 1}    
+  if (n < 1) {slideIndex = slides.length}
+  for (i = 0; i < slides.length; i++) {
+      slides[i].style.display = "none";  
+  }
+  for (i = 0; i < dots.length; i++) {
+      dots[i].className = dots[i].className.replace(" active", "");
+  }
+  slides[slideIndex-1].style.display = "block";  
+  dots[slideIndex-1].className += " active";
+}
+
+$(document).scroll(function () {
+  var $nav = $(".topnav");
+  $nav.toggleClass('scrolled', $(this).scrollTop() > $nav.height());
+});
+
+
+</script>
+
+  <script src="/scripts/script.js"></script>
+</body>
+</html>

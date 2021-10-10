@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="icon" type="image/jpg" href="/resources/images/favicon.jpg" />
+	<link href="/styles/style.css" rel="stylesheet" type="text/css" />
+	<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+	<script src="https://unpkg.com/aos@2.3.1/dist/aos.js">
+
+	</script>
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css" rel="stylesheet">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js">
+
+	</script>
+	<title>LWAB - Contact</title>
+	<script>
+	  $(function(){
+        $("#importNavbar").load(document.cookie ? "/resources/navbar2.html" : "/resources/navbar1.html"); 
+        $("#importFooter").load("/resources/footer.html");
+      });
+	</script>
+</head>
+
+<body>
+	<div id="importNavbar"></div>
+
+	<div class="body">
+		<div class="top-land" id="contact-land">
+			<div class="left-div">
+				<h1>Feel Free to<br><span class="typed-text"> Get in Touch </span><br>With Us</h1>
+      </div>
+  </div>
+
+  <div class="white-container"> 
+    <div class="forms">
+    <h1>Fill the Form .<br> It's Easy !</h1>
+    <br><br>
+    <form action="/api/contact-email" method="POST" enctype="multipart/form-data" data-aos="fade-right"
+     data-aos-easing="ease-in-sine">
+        <input type="text" name="name" placeholder="Full Name" requried><br><br>
+        <input type="email" name="email" placeholder="Your Email Address" required><br><br>
+        <textarea id="msg-ta" rows="7" cols="40" placeholder="Write your message here.."></textarea>
+  
+        <br><br>
+        <button type="submit">Send</button>
+        
+    </form>
+    </div>
+    <br>
+  </div>
+  <div class="color-container">
+    <div class="forms">
+    <h1>Contact our team</h1>
+    <p>Reach out to our individual team members here.</p>
+    <div class="flex-container">
+    <section class="col-1" data-aos="fade-left"
+     data-aos-easing="ease-in-sine">
+        <h2>Quinn Gibson<br> (stranothus)</h2>
+        <a href="https://github.com/stranothus" target="_blank"><i class="fab fa-github"></i></a><br>
+        <span class="emails">stranothus@gmail.com</span>
+    </section>
+    <section class="col-2" data-aos="fade-left"
+     data-aos-easing="ease-in-sine">
+         <h2>LeafKn<br> (knaagar)</h2>
+          <a href="https://github.com/knaagar" target="_blank"><i class="fab fa-github"></i></a><br>
+          <span class="emails">example@gmail.com</span>
+    </section>
+    <section class="col-3" data-aos="fade-left"
+     data-aos-easing="ease-in-sine">
+          <h2>Tasnim Reza Arittra<br> (trArittra)</h2>
+          <a href="https://github.com/Arittra" target="_blank"><i class="fab fa-github"></i></a><br>
+          <span class="emails">trarittra@gmail.com</span>
+    </section>
+    </div>
+    </div>
+  </div>
+  <div class="white-container">
+    <div class="forms">
+    <h1>We are eager to help you out!</h1>
+    </div>
+  </div>
+   <div id="importFooter"></div>
+  </div>
+
+  <script src="/scripts/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="icon" type="image/jpg" href="/resources/images/favicon.jpg" />
+	<link href="/styles/dashboard.css" rel="stylesheet" type="text/css" />
+	<title>Profile - Settings</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js">
+
+	</script>
+	<link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+	<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js">
+
+	</script>
+	<script>
+		$(function(){
+        $("#importNavbar").load(document.cookie ? "/resources/navbar2.html" : "/resources/navbar1.html"); 
+        $("#importFooter").load("/resources/footer.html");
+        $("#importSidebar").load("/resources/sidebar.html", onnavLoad);
+      });
+	</script>
+</head>
+
+<body>
+
+
+	<div id="importSidebar"></div>
+	<div class="top-nav-thingy">
+		<span id = "top-name">Name</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class='bx bxs-bell'></span>&nbsp;&nbsp;&nbsp;
+  </div>
+  <div class="content">
+    
+    <h1>Settings</h1>
+    <br><br>
+    <div class="center" id="del-set">
+     <form style="padding: 50px 0 100px 0;" action = "/api/delete-account" method = "POST" enctype = "multipart/form-data">
+            <input style="outline:none;font-size:1.2rem;" type = "password" name = "password" placeholder = "Password"><br><br>
+            <div class="center">
+            <button style="font-size:1.2rem">Delete account</button>
+            </div>
+          </form>
+
+          <br><br>
+        
+    </div>
+    <div class="center">
+      <h2>You can delete your particular goal on its particular page.</h2>
+    </div>
+  </div>
+  <script>
+      function onnavLoad() {
+        window.navbar = document.querySelector(".sidebar");
+        window.closeBtn = document.querySelector("#btn");
+        window.searchBtn = document.querySelector(".bx-search");
+
+        closeBtn.addEventListener("click", () => {
+          navbar.classList.toggle("open");
+          menuBtnChange();
+        });
+
+        searchBtn.addEventListener("click", () => {
+          navbar.classList.toggle("open");
+          menuBtnChange();
+        });
+        menuBtnChange = function() {
+          if (navbar.classList.contains("open")) {
+            closeBtn.classList.replace("bx-menu", "bx-menu-alt-right");
+          } else {
+            closeBtn.classList.replace("bx-menu-alt-right", "bx-menu");
+          }
+        }
+      }
+
+      let topName = document.getElementById("top-name");
+      // let name2 = document.getElementById("nameish");
+      // let date = document.getElementById("createdate");
+      // let mail = document.getElementById("mail");
+      // let age = document.getElementById("aget");
+      // let gn = document.getElementById("gn");
+
+      fetch("/api/user")
+      .then(response => response.json())
+      .then(data => {
+          topName.textContent = data.name;
+          // name2.textContent = data.name;
+          // date.textContent = data.created.split("T")[0];
+          // mail.textContent = data.email;
+          // age.textContent = data.age;
+          // gn.textContent = data.goals.length;
+      });
+ 
+  </script>
+
+  <script src="/scripts/vue.js"></script>
+</body>
+</html>
