@@ -255,6 +255,10 @@ body {
   text-align: center;
   transition: 0.15s;
 }
+
+.bcards {
+  background-color: rgb(62, 59, 69);
+}
             
 .bcards h2 {
   text-align: center;  
