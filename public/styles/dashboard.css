@@ -256,7 +256,7 @@ body {
   transition: 0.15s;
 }
 
-.bcards {
+.bcards:hover {
   background-color: rgb(62, 59, 69);
 }
             
