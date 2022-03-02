@@ -54,7 +54,8 @@ const transporter = nodemailer.createTransport({
 const uri = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.syxz1.mongodb.net/users?retryWrites=true&w=majority`;
 var client,
     users,
-    health;
+    health,
+    articles;
 
 MongoClient.connect(uri,
     {
@@ -68,6 +69,7 @@ MongoClient.connect(uri,
 
         users = client.db("users");
         health = client.db("health");
+        articles = client.db("articles");
     }
 );
 
@@ -124,6 +126,10 @@ pages.get("/dashboard", (req, res) => {
 
 pages.get("/sign-up", (req, res) => {
     res.sendFile(__dirname + "/public/views/sign-up.html");
+});
+
+pages.get("/add-art", (req, res) => {
+    res.sendFile(__dirname + "/public/views/addarticle.html");
 });
 
 pages.get("/login", (req, res) => {
@@ -294,6 +300,20 @@ api.post("/sign-up", (req, res) => {
         // missing body values
         res.status(400).redirect("/pages/sign-up");
     }
+});
+
+api.post("/add-art", (req, res) => {
+  let body = req.body;
+
+  let post = {
+    name: body.name,
+    content: body.content,
+    created: new Date()
+  };
+
+  articles.collection("posts").insertOne(post);
+
+  res.redirect('/pages/self-care');
 });
 
 api.get("/verify/:token", (req, res) => {
@@ -773,6 +793,14 @@ api.get("/logout", (req, res) => {
 
 api.get("/foods", (req, res) => {
     health.collection("food").find({ }).toArray(function(err, results) {
+        if(err) console.error(err);
+
+        res.json(results);
+    });
+});
+
+api.get("/articles", (req, res) => {
+    articles.collection("posts").find({ }).toArray(function(err, results) {
         if(err) console.error(err);
 
         res.json(results);
