@@ -320,6 +320,21 @@ p {
   font-family: 'Open Sans', sans-serif;
   transition: 200ms;
 }
+
+  #content {
+    margin-bottom: 10px;
+  width: 90%;
+  height: 7em;
+  outline: none;
+  background-color: inherit;
+  border-bottom: 2px solid #8f8d8d;
+  border-left: none;
+  border-top: none;
+  border-right: none;
+  font-size: 1.3em;
+  font-family: 'Open Sans', sans-serif;
+    resize: vertical;
+  }
 #msg-ta {
   height: 6em !important;
 }
