@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/jpg" href="/resources/images/favicon.jpg" />
+	<link href="/styles/style.css" rel="stylesheet" type="text/css" />
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css" rel="stylesheet">
+  <title>LWAB - Add Article</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+  <div class="bg-form">
+  <div class="card-forms" id="card-form-2">
+  <div class="form-content">
+  <form action = "/api/add-art" method = "POST" enctype = "multipart/form-data">
+  <h1>Add an article</h1>
+    <input type = "text" name = "name" placeholder = "Name">
+    <br>
+    <textarea required type="text" name="content" id="content">Write your content...</textarea>
+    <div class="center-div">
+    <button class="form-btn" >Submit</button>
+    </div>
+  </form>
+  </div>
+  </div>
+  <script src="/scripts/script.js"></script>
+  <script>
+    const form = document.querySelector("form");
+    
+    form.onsubmit = e => {
+      let data = new FormData(form),
+          name = data.get("name"),
+          content = data.get("content")
+    };
+  </script>
+</body>
+</html>
