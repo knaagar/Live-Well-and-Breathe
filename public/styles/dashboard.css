@@ -480,3 +480,6 @@ select.form-control:not([size]):not([multiple]) {
 #food {
   padding: 10px;
 }
+.df {
+ color: #fff !important; 
+}
