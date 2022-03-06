@@ -1,29 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/jpg" href="/resources/images/favicon.jpg" />
-	<link href="/styles/style.css" rel="stylesheet" type="text/css" />
-	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css" rel="stylesheet">
-  <title>LWAB - Add Article</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="icon" type="image/jpg" href="/resources/images/favicon.jpg" />
+	<link href="/styles/dashboard.css" rel="stylesheet" type="text/css" />
+  	<link href="/styles/style.css" rel="stylesheet" type="text/css" />
+	<title>Add Article</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js">
+	</script>
+  <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+	<script>
+	  $(function(){
+        $("#importNavbar").load(document.cookie ? "/resources/navbar2.html" : "/resources/navbar1.html"); 
+        $("#importFooter").load("/resources/footer.html");
+        $("#importSidebar").load("/resources/sidebar.html", onnavLoad);
+      });
+	</script>
 </head>
+
 <body>
-  <div class="bg-form">
-  <div class="card-forms" id="card-form-2">
+
+    
+  <div id = "importSidebar"></div>
+  	<div class="top-nav-thingy">
+		<span id = "top-name">Name</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class='bx bxs-bell'></span>&nbsp;&nbsp;&nbsp;
+  </div>
+  <div class="content" id="app" v-if="!loading">
+    <div v-if="loading" class="center">
+      <div id="loader">
+        <h1>LOADING...</h1>
+      </div>
+        </div>
+  <div>
+  <div>
   <div class="form-content">
   <form action = "/api/add-art" method = "POST" enctype = "multipart/form-data">
   <h1>Add an article</h1>
-    <input type = "text" name = "name" placeholder = "Name">
+    <input required type = "text" name = "name" placeholder = "Name" class="df">
     <br>
-    <textarea required type="text" name="content" id="content">Write your content...</textarea>
+    <textarea required type="text" name="content" id="content" placeholder="Write your content..." class="df"></textarea>
     <div class="center-div">
     <button class="form-btn" >Submit</button>
     </div>
   </form>
   </div>
   </div>
+    </div>
+    
   <script src="/scripts/script.js"></script>
   <script>
     const form = document.querySelector("form");
@@ -34,5 +60,43 @@
           content = data.get("content")
     };
   </script>
+  <script>
+      function onnavLoad() {
+        window.navbar = document.querySelector(".sidebar");
+        window.closeBtn = document.querySelector("#btn");
+        window.searchBtn = document.querySelector(".bx-search");
+
+        closeBtn.addEventListener("click", () => {
+          navbar.classList.toggle("open");
+          menuBtnChange();
+        });
+
+        searchBtn.addEventListener("click", () => {
+          navbar.classList.toggle("open");
+          menuBtnChange();
+        });
+        menuBtnChange = function() {
+          if (navbar.classList.contains("open")) {
+            closeBtn.classList.replace("bx-menu", "bx-menu-alt-right");
+          } else {
+            closeBtn.classList.replace("bx-menu-alt-right", "bx-menu");
+          }
+        }
+      }
+
+      let topName = document.getElementById("top-name");
+  
+
+      fetch("/api/user")
+      .then(response => response.json())
+      .then(data => {
+          topName.textContent = data.name;
+         
+      });
+      
+
+  </script>
+
+  <script src="/scripts/vue.js"></script>
 </body>
 </html>
