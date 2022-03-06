@@ -93,11 +93,28 @@
     </article>
   </main>
 </div>
+<br><br>
+ <h2 id="covid">#ByUsers</h2>
+    <br>
+      <div class="container">
+  <main class="grid" id="byusers">
+  </main>
+</div>
 
 
     </div>
  
   </div>
+  <div id="mod" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2 id="title"></h2>
+    <br><br>
+    <p id='thing'></p>
+    <br><br>
+  </div>
+
+</div>
   <script>
       function onnavLoad() {
         window.navbar = document.querySelector(".sidebar");
@@ -130,7 +147,45 @@
           topName.textContent = data.name;
           
       });
-      
+
+    let articles = document.getElementById("byusers");
+    fetch("/api/articles")
+      .then(response => response.json())
+      .then(data => {
+        for(let i = 0; i < data.length; i++) {
+          articles.innerHTML = `<article>
+      <div>
+      <div class="text">
+        <h3>${data[i].name}</h3>
+        <p>${data[i].content.substr(0, 40)}...</p>
+
+        <br>
+<a class="btn btn-primary btn-block" href="javascript:openModal('${data[i].content}', '${data[i].name}')">Read more</a>
+      </div>
+      </div>
+    </article>`;
+        }
+          
+      });
+
+    function openModal(content, title) {
+      var modal = document.getElementById("mod");
+var span = document.getElementsByClassName("close")[0];
+  modal.style.display = "block";
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+      document.getElementById("thing").innerText = content;
+      document.getElementById("title").innerText = title;
+    }
+
+    
 
   </script>
 
