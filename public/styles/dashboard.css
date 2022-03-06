@@ -520,3 +520,10 @@ select.form-control:not([size]):not([multiple]) {
   text-decoration: none;
   cursor: pointer;
 }
+
+.add {
+  color: #fff;
+  background-color: #7e3af2;
+  padding: 10px;
+  text-decoration: none;
+}
