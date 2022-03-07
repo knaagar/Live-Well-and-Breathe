@@ -11,11 +11,15 @@ const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const { MongoClient } = require('mongodb');
+const sanitizeHtml = require("sanitize-html");
 
 
 // load in local modules
 
 const { genSalt, genHash, checkHash } = require("./utils/encrypt.js");
+const loggedIn = require("./utils/loggedIn.js");
+let updateToken = require("./utils/updateToken.js");
+const email = require("./utils/emails.js");
 
 
 // initiate npm packages and set up middleware
@@ -32,15 +36,6 @@ const storage = multer.diskStorage({
 });
 const formParsing = multer({ storage: storage }).array("file");
 const cookies = cookieParser();
-const loggedIn = (req, res, next) => {
-    if(req.cookies.token) {
-        req.loggedIn = jwt.verify(req.cookies.token, process.env.TOKEN_SECRET);
-    } else {
-        req.loggedIn = false;
-    }
-
-    next();
-}
 const staticPublic = express.static(__dirname + "/public");
 
 const transporter = nodemailer.createTransport({
@@ -70,6 +65,8 @@ MongoClient.connect(uri,
         users = client.db("users");
         health = client.db("health");
         articles = client.db("articles");
+
+				updateToken = updateToken(users);
     }
 );
 
@@ -104,100 +101,29 @@ app.get("/", (req, res) => {
 
 // pages routing
 
-pages.get("/home", (req, res) => {
-    res.sendFile(__dirname + "/public/views/index.html");
-});
-
-pages.get("/about", (req, res) => {
-  res.sendFile(__dirname + "/public/views/about.html")
-});
-
-pages.get("/features", (req, res) => {
-  res.sendFile(__dirname + "/public/views/features.html")
-});
-
-pages.get("/contact", (req, res) => {
-  res.sendFile(__dirname + "/public/views/contact.html")
-});
-
-pages.get("/dashboard", (req, res) => {
-  res.sendFile(__dirname + "/public/views/dashboard.html")
-});
-
-pages.get("/sign-up", (req, res) => {
-    res.sendFile(__dirname + "/public/views/sign-up.html");
-});
-
-pages.get("/add-art", (req, res) => {
-    res.sendFile(__dirname + "/public/views/addarticle.html");
-});
-
-pages.get("/login", (req, res) => {
-    res.sendFile(__dirname + "/public/views/login.html");
-});
-
-pages.get("/new-password", (req, res) => {
-    res.sendFile(__dirname + "/public/views/new-password.html");
-});
-
-pages.get("/forgot-password", (req, res) => {
-    res.sendFile(__dirname + "/public/views/forgot-password.html");
-});
-
-pages.get("/goal/:title", (req, res) => {
-    res.sendFile(__dirname + "/public/views/goal.html")
-});
-
-pages.get("/create-goal", (req, res) => {
-  res.sendFile(__dirname + "/public/views/create-goal.html");
-});
-
-pages.get("/food-suggest", (req, res) => {
-  res.sendFile(__dirname + "/public/views/food-suggest.html");
-});
-
-pages.get("/self-care", (req, res) => {
-  res.sendFile(__dirname + "/public/views/self-care.html");
-});
-
-pages.get("/sleep-track", (req, res) => {
-  res.sendFile(__dirname + "/public/views/sleep-track.html");
-});
-
-pages.get("/inspire", (req, res) => {
-  res.sendFile(__dirname + "/public/views/inspire.html");
-});
-
-pages.get("/profile", (req, res) => {
-  res.sendFile(__dirname + "/public/views/profile.html");
-});
-
-pages.get("/tools", (req, res) => {
-  res.sendFile(__dirname + "/public/views/tools.html");
-});
-
-pages.get("/profile/settings", (req, res) => {
-  res.sendFile(__dirname + "/public/views/settings.html");
-});
-
-pages.get("/self-care/article1", (req, res) => {
-  res.sendFile(__dirname + "/public/views/article1.html");
-});
-
-pages.get("/self-care/article2", (req, res) => {
-  res.sendFile(__dirname + "/public/views/article2.html");
-});
-
-pages.get("/self-care/article3", (req, res) => {
-  res.sendFile(__dirname + "/public/views/article3.html");
-});
-
-pages.get("/meditate", (req, res) => {
-  res.sendFile(__dirname + "/public/views/meditate.html");
-});
-
-
-
+pages.get("/home", (req, res) => res.sendFile(__dirname + "/public/views/index.html"));
+pages.get("/about", (req, res) => res.sendFile(__dirname + "/public/views/about.html"));
+pages.get("/features", (req, res) => res.sendFile(__dirname + "/public/views/features.html"));
+pages.get("/contact", (req, res) => res.sendFile(__dirname + "/public/views/contact.html"));
+pages.get("/dashboard", (req, res) => res.sendFile(__dirname + "/public/views/dashboard.html"));
+pages.get("/sign-up", (req, res) => res.sendFile(__dirname + "/public/views/sign-up.html"));
+pages.get("/add-art", (req, res) => res.sendFile(__dirname + "/public/views/addarticle.html"));
+pages.get("/login", (req, res) => res.sendFile(__dirname + "/public/views/login.html"));
+pages.get("/new-password", (req, res) => res.sendFile(__dirname + "/public/views/new-password.html"));
+pages.get("/forgot-password", (req, res) => res.sendFile(__dirname + "/public/views/forgot-password.html"));
+pages.get("/goal/:title", (req, res) => res.sendFile(__dirname + "/public/views/goal.html"));
+pages.get("/create-goal", (req, res) => res.sendFile(__dirname + "/public/views/create-goal.html"));
+pages.get("/food-suggest", (req, res) => res.sendFile(__dirname + "/public/views/food-suggest.html"));
+pages.get("/self-care", (req, res) => res.sendFile(__dirname + "/public/views/self-care.html"));
+pages.get("/sleep-track", (req, res) => res.sendFile(__dirname + "/public/views/sleep-track.html"));
+pages.get("/inspire", (req, res) => res.sendFile(__dirname + "/public/views/inspire.html"));
+pages.get("/profile", (req, res) => res.sendFile(__dirname + "/public/views/profile.html"));
+pages.get("/tools", (req, res) => res.sendFile(__dirname + "/public/views/tools.html"));
+pages.get("/profile/settings", (req, res) => res.sendFile(__dirname + "/public/views/settings.html"));
+pages.get("/self-care/article1", (req, res) => res.sendFile(__dirname + "/public/views/article1.html"));
+pages.get("/self-care/article2", (req, res) => res.sendFile(__dirname + "/public/views/article2.html"));
+pages.get("/self-care/article3", (req, res) => res.sendFile(__dirname + "/public/views/article3.html"));
+pages.get("/meditate", (req, res) => res.sendFile(__dirname + "/public/views/meditate.html"));
 
 
 // api routing
@@ -205,7 +131,7 @@ pages.get("/meditate", (req, res) => {
 // create sign up endpoint
 
 api.post("/sign-up", (req, res) => {
-    let body = req.body;
+    const body = req.body;
 
     if(body.email && body.name && body.password && body.confirmPassword && body.age) {
         if(!body.email.match(/[a-z0-9!#$%&'*+/=?^_\`{|}~-]+(?:\.[a-z0-9!#$%&\'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/)) {
@@ -223,10 +149,10 @@ api.post("/sign-up", (req, res) => {
 
                 if(!result) {
                     // create account
-                    let salt = await genSalt(Math.floor(Math.random() * 10));
-                    let hash = await genHash(body.password, salt);
+                    const salt = await genSalt(Math.floor(Math.random() * 10));
+                    const hash = await genHash(body.password, salt);
 
-                    let userObj = {
+                    const userObj = {
                         hash: hash,
                         email: body.email,
                         name: body.name,
@@ -241,49 +167,20 @@ api.post("/sign-up", (req, res) => {
                     users.collection("accounts").insertOne(userObj, (err, result) => {
                         if(err) console.error(err);
 
-                        let token = jwt.sign(userObj, process.env.VERIFY_SECRET);
+                        const token = jwt.sign(userObj, process.env.VERIFY_SECRET);
 
-                        let mailOptions = {
+                        const mailOptions = {
                             from: process.env.GMAIL_NAME + "@gmail.com",
                             to: userObj.email,
                             subject: "Verify your Account",
                             text: `Follow the link below to verify your Live Well And Breathe account: ${domainName}/api/verify/${token}`,
-                            html: `
-                            <!DOCTYPE html>
-                            <html>
-                                <head>
-                                    <meta charset = "utf-8">
-                                    <title>Verify your Account</title>
-                                    <style>
-                                        * {
-                                            margin : 0;
-                                            padding : 0;
-                                        }
-
-                                        body {
-                                            background-color : none;
-                                        }
-
-                                        #main {
-                                            margin : 50px 100px;
-                                            padding : 25px 50px;
-                                        }
-                                    </style>
-                                </head>
-                                <body>
-                                    <div id = "main">
-                                        <p>Follow the link below to verify your Live Well And Breathe account:</p>
-                                        <a href = "${domainName}/api/verify/${token}">Verify</a>
-                                        <p>If you have not created a Live Well and Breathe account through this email, someone may be impersonting you or using your email. Do not click the above link, and you can reply to this email for the account to be terminated, if necessary.</p>
-                                    </div>
-                                </body>
-                            </html>`
+                            html: email.signup(domainName, token)
                         };
 
                         transporter.sendMail(mailOptions, function(err, result) {
                             if (err) console.error(err);
 
-                            let token = jwt.sign(result, process.env.TOKEN_SECRET);
+                            const token = jwt.sign(result, process.env.TOKEN_SECRET);
 
                             res.cookie("token", token);
                             res.send("Please confirm your email");
@@ -303,11 +200,13 @@ api.post("/sign-up", (req, res) => {
 });
 
 api.post("/add-art", (req, res) => {
-  let body = req.body;
+  const body = req.body;
+  const html = body.content;
+  const sanitized = sanitizeHtml(html);
 
-  let post = {
+  const post = {
     name: body.name,
-    content: body.content,
+    content: sanitized,
     created: new Date()
   };
 
@@ -317,7 +216,7 @@ api.post("/add-art", (req, res) => {
 });
 
 api.get("/verify/:token", (req, res) => {
-    let params = req.params;
+    const params = req.params;
     let token = params.token;
         token = jwt.verify(token, process.env.VERIFY_SECRET);
     
@@ -333,7 +232,7 @@ api.get("/verify/:token", (req, res) => {
 });
 
 api.post("/login", (req, res) => {
-    let body = req.body;
+    const body = req.body;
 
     if(body.email && body.password) {
         users.collection("accounts").findOne({ "email" : body.email }, async (err, result) => {
@@ -341,7 +240,7 @@ api.post("/login", (req, res) => {
 
             if(result) {
                 if(await checkHash(body.password, result.hash)) {
-                    let token = jwt.sign(result, process.env.TOKEN_SECRET);
+                    const token = jwt.sign(result, process.env.TOKEN_SECRET);
 
                     res.cookie("token", token);
                     res.redirect("/pages/home");
@@ -358,7 +257,7 @@ api.post("/login", (req, res) => {
 });
 
 api.post("/new-password", (req, res) => {
-    let body = req.body;
+    const body = req.body;
 
     if(body.email && body.oldPassword && body.newPassword && body.confirmPassword) {
         // check if passwords are valid
@@ -374,13 +273,13 @@ api.post("/new-password", (req, res) => {
 
                 if(result) {
                     if(await checkHash(body.oldPassword, result.hash)) {
-                        let salt = await genSalt(Math.floor(Math.random() * 10));
-                        let hash = await genHash(body.newPassword, salt);
+                        const salt = await genSalt(Math.floor(Math.random() * 10));
+                        const hash = await genHash(body.newPassword, salt);
 
                         users.collection("accounts").updateOne({ "email" : body.email }, { "$set" : { "hash" : hash }}, (err, result) => {
                             if(err) console.error(err);
 
-                            let token = jwt.sign(result, process.env.TOKEN_SECRET);
+                            const token = jwt.sign(result, process.env.TOKEN_SECRET);
 
                             res.cookie("token", token);
                             res.redirect("/pages/home");
@@ -399,13 +298,13 @@ api.post("/new-password", (req, res) => {
 });
 
 api.post("/new-name", (req, res) => {
-    let body = req.body;
+    const body = req.body;
 
     if(body.name && req.loggedIn) {
         users.collection("accounts").updateOne({ "hash" : req.loggedIn.hash }, { "$set" : { "name" : body.name }}, (err, result) => {
             if(err) console.error(err);
 
-            let token = jwt.sign(result, process.env.TOKEN_SECRET);
+            const token = jwt.sign(result, process.env.TOKEN_SECRET);
 
             res.cookie("token", token);
             res.status(204).send();
@@ -416,7 +315,7 @@ api.post("/new-name", (req, res) => {
 });
 
 api.post("/new-email", (req, res) => {
-    let body = req.body;
+    const body = req.body;
 
     if(body.email && req.loggedIn) {
         if(!body.email.match(/[a-z0-9!#$%&'*+/=?^_\`{|}~-]+(?:\.[a-z0-9!#$%&\'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/)) {
@@ -427,49 +326,20 @@ api.post("/new-email", (req, res) => {
             users.collection("accounts").updateOne({ "hash" : req.loggedIn.hash }, { "$set" : { "email" : body.email, "confirmed" : false }}, (err, result) => {
                 if(err) console.error(err);
 
-                let token = jwt.sign(userObj, process.env.VERIFY_SECRET);
+                const token = jwt.sign(userObj, process.env.VERIFY_SECRET);
 
-                let mailOptions = {
+                const mailOptions = {
                     from: process.env.GMAIL_NAME + "@gmail.com",
                     to: userObj.email,
                     subject: "Verify your New Email",
                     text: `Follow the link below to verify your new Live Well And Breathe email: ${domainName}/api/verify/${token}`,
-                    html: `
-                    <!DOCTYPE html>
-                    <html>
-                        <head>
-                            <meta charset = "utf-8">
-                            <title>Verify your New Email</title>
-                            <style>
-                                * {
-                                    margin : 0;
-                                    padding : 0;
-                                }
-
-                                body {
-                                    background-color : none;
-                                }
-
-                                #main {
-                                    margin : 50px 100px;
-                                    padding : 25px 50px;
-                                }
-                            </style>
-                        </head>
-                        <body>
-                            <div id = "main">
-                                <p>Follow the link below to verify your new Live Well And Breathe email:</p>
-                                <a href = "${domainName}/api/verify/${token}">Verify</a>
-                                <p>If you have not requested this email be set to your new Live Well and Breathe email, there may have been a mistake. You can ignore the link above. </p>
-                            </div>
-                        </body>
-                    </html>`
+                    html: email.verify(domainName, token)
                 };
 
                 transporter.sendMail(mailOptions, function(err, result) {
                     if (err) console.error(err);
 
-                    let token = jwt.sign(result, process.env.TOKEN_SECRET);
+                    const token = jwt.sign(result, process.env.TOKEN_SECRET);
 
                     res.cookie("token", token);
                     res.send("Please confirm your new email");
@@ -482,49 +352,21 @@ api.post("/new-email", (req, res) => {
 });
 
 api.post("/forgot-password", (req, res) => {
-    let body = req.body;
+    const body = req.body;
 
     if(body.email) {
         users.collection("accounts").findOne({ "email" : body.email }, (err, result) => {
             if(err) console.error(err);
 
             if(result) {
-                let token = jwt.sign(result, process.env.RESET_SECRET);
+                const token = jwt.sign(result, process.env.RESET_SECRET);
 
-                let mailOptions = {
+                const mailOptions = {
                     from: process.env.GMAIL_NAME + "@gmail.com",
                     to: result.email,
                     subject: "Reset Password",
                     text: `Follow the link below to reset your Live Well and Breathe password: ${domainName}/api/reset-password/${token}`,
-                    html: `
-                    <!DOCTYPE html>
-                    <html>
-                        <head>
-                            <meta charset = "utf-8">
-                            <title>Reset Password</title>
-                            <style>
-                                * {
-                                    margin : 0;
-                                    padding : 0;
-                                }
-
-                                body {
-                                    background-color : none;
-                                }
-
-                                #main {
-                                    margin : 50px 100px;
-                                    padding : 25px 50px;
-                                }
-                            </style>
-                        </head>
-                        <body>
-                            <div id = "main">
-                                <p>Follow the link below to reset your Live Well and Breathe password:</p>
-                                <a href = "${domainName}/api/get-reset-password/${token}">Reset</a>
-                            </div>
-                        </body>
-                    </html>`
+                    html: email.forgotPassword(domainName, token)
                 };
 
                 transporter.sendMail(mailOptions, function(err, result) {
@@ -542,7 +384,7 @@ api.post("/forgot-password", (req, res) => {
 });
 
 api.get("/get-reset-password/:token", (req, res) => {
-    let params = req.params,
+    const params = req.params,
         token = params.token;
         
     if(token) {
@@ -553,10 +395,10 @@ api.get("/get-reset-password/:token", (req, res) => {
 });
 
 api.post("/reset-password/:token", async (req, res) => {
-    let params = req.params,
-        token = params.token;
+    const params = req.params;
+  	let token = params.token;
         token = jwt.verify(token, process.env.RESET_SECRET);
-    let body = req.body;
+    const body = req.body;
 
     if(token && body.newPassword && body.confirmPassword) {
         // check if passwords are valid
@@ -567,8 +409,8 @@ api.post("/reset-password/:token", async (req, res) => {
             // weak password (must have at least 2 uppercase letters and 2 digits with a total password length of 8 or more characters)
             res.status(400).redirect("back");
         } else {
-            let salt = await genSalt(Math.floor(Math.random() * 10));
-            let hash = await genHash(body.newPassword, salt);
+            const salt = await genSalt(Math.floor(Math.random() * 10));
+            const hash = await genHash(body.newPassword, salt);
 
             users.collection("accounts").updateOne({ "email" : token.email }, { "$set" : { "hash" : hash }}, (err, result) => {
                 if(err) console.error(err);
@@ -589,14 +431,7 @@ api.post("/reset-password/:token", async (req, res) => {
 
 api.get("/update-token", (req, res) => {
     if(req.loggedIn) {
-        users.collection("accounts").findOne({ "hash" : req.loggedIn.hash }, (err, result) => {
-            if(err) console.error(err);
-
-            let token = jwt.sign(result, process.env.TOKEN_SECRET);
-
-            res.cookie("token", token);
-            res.status(204).send("Token updated");
-        });
+        updateToken(req, res).then(() => res.status(204).send("Token updated"));
     } else {
         res.clearCookie("token");
         res.status(204).send("Token updated");
@@ -604,7 +439,7 @@ api.get("/update-token", (req, res) => {
 });
 
 api.post("/delete-account", (req, res) => {
-    let body = req.body;
+    const body = req.body;
 
     if(req.loggedIn && body.password) {
         users.collection("accounts").findOne({ "hash" : req.loggedIn.hash }, async function(err, result) {
@@ -631,47 +466,19 @@ api.post("/delete-account", (req, res) => {
 });
 
 api.post("/contact-email", (req, res) => {
-    let body = req.body;
+    const body = req.body;
 
     if(body.email && body.content && body.name) {
         if(!body.email.match(/[a-z0-9!#$%&'*+/=?^_\`{|}~-]+(?:\.[a-z0-9!#$%&\'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/)) {
             // invalid email
             res.status(400).redirect("back");
         } else {
-            let mailOptions = {
+            const mailOptions = {
                 from: process.env.GMAIL_NAME + "@gmail.com",
                 to: "stranothus@gmail.com",
                 subject: "Contact Email",
                 text: ``,
-                html: `
-                <!DOCTYPE html>
-                <html>
-                    <head>
-                        <meta charset = "utf-8">
-                        <title>Contact Email</title>
-                        <style>
-                            * {
-                                margin : 0;
-                                padding : 0;
-                            }
-
-                            body {
-                                background-color : none;
-                            }
-
-                            #main {
-                                margin : 50px 100px;
-                                padding : 25px 50px;
-                            }
-                        </style>
-                    </head>
-                    <body>
-                        <div id = "main">
-                            <p>${body.name} (${body.email}) has contacted you from Live Well and Breathe.</p>
-                            <p>${body.content.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</p>
-                        </div>
-                    </body>
-                </html>`
+                html: email.contact(body.name, body.email, body.content.replace(/</g, "&lt;").replace(/>/, "&gt;"))
             };
 
             transporter.sendMail(mailOptions, function(err, result) {
@@ -694,10 +501,10 @@ api.get("/user", (req, res) => {
 });
 
 api.post("/new-goal", (req, res) => {
-    let body = req.body;
+    const body = req.body;
 
     if(req.loggedIn && body.title && body.completeBy && body.desc && body.urgency) {
-        let goalObj = {
+        const goalObj = {
             title: body.title,
             completeBy: new Date(body.completeBy),
             desc: body.desc,
@@ -723,20 +530,13 @@ api.post("/new-goal", (req, res) => {
 });
 
 api.post("/goal-progress", (req, res) => {
-    let body = req.body;
+    const body = req.body;
 
     if(req.loggedIn && body.created && body.progress) {
         users.collection("accounts").updateOne({ "hash" : req.loggedIn.hash, "goals.created" : new Date(body.created) }, { "$push" : { "goals.$.progress" :  body.progress }}, (err, result) => {
             if(err) console.error(err);
 
-            users.collection("accounts").findOne({ "hash" : req.loggedIn.hash }, (err, result) => {
-                if(err) console.error(err);
-
-                let token = jwt.sign(result, process.env.TOKEN_SECRET);
-
-                res.cookie("token", token);
-                res.status(200).redirect('back');
-            });
+						updateToken(req, res).then(() => res.status(200).redirect("back"));
         });
     } else {
         res.status(400).redirect("back");
@@ -745,20 +545,13 @@ api.post("/goal-progress", (req, res) => {
 
 
 api.post("/goal-finish", (req, res) => {
-    let body = req.body;
+    const body = req.body;
 
     if(req.loggedIn && body.created) {
         users.collection("accounts").updateOne({ "hash" : req.loggedIn.hash, "goals.created" : new Date(body.created) }, { "$set" : {"goals.$.completed" : true }}, (err, result) => {
             if(err) console.error(err);
 
-            users.collection("accounts").findOne({ "hash" : req.loggedIn.hash }, (err, result) => {
-                if(err) console.error(err);
-
-                let token = jwt.sign(result, process.env.TOKEN_SECRET);
-
-                res.cookie("token", token);
-                res.status(200).redirect("/pages/dashboard");
-            });
+						updateToken(req, res).then(() => res.status(200).redirect("/pages/dashboard"));
         });
     } else {
         res.status(400).redirect("back");
@@ -766,20 +559,13 @@ api.post("/goal-finish", (req, res) => {
 });
 
 api.post("/goal-delete", (req, res) => {
-    let body = req.body;
+    const body = req.body;
 
     if(req.loggedIn && body.created) {
         users.collection("accounts").updateOne({ "hash" : req.loggedIn.hash }, { "$pull" : { "goals" : { "created" : new Date(body.created) }}}, function(err, result) {
             if(err) console.error(err);
 
-            users.collection("accounts").findOne({ "hash" : req.loggedIn.hash }, (err, result) => {
-                if(err) console.error(err);
-
-                let token = jwt.sign(result, process.env.TOKEN_SECRET);
-
-                res.cookie("token", token);
-                res.status(200).redirect("/pages/dashboard");
-            });
+						updateToken(req, res).then(() => res.status(200).redirect("/pages/dashboard"));
         });
     } else {
         res.status(400).redirect("back");
@@ -808,8 +594,8 @@ api.get("/articles", (req, res) => {
 });
 
 api.get("/food-for/:condition", (req, res) => {
-    let params = req.params;
-    let condition = params.condition;
+    const params = req.params;
+    const condition = params.condition;
 
     health.collection("food").find({ "issue": { "$regex": new RegExp(condition, "i") }}).toArray(function(err, results) {
         if(err) console.error(err);

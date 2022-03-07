@@ -138,14 +138,14 @@
       }
     },
     mounted:function(){
-        this.newQuote() 
-  },
+      this.newQuote();
+  	},
     methods: {
       newQuote: function(){
         this.random = Math.floor(Math.random() * 5) + 0
         this.quote = this.quotes[this.random];
         this.person = this.persons[this.random];
-   }
+   		}
     }
   });
 })();

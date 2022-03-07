@@ -9,7 +9,7 @@ function responsiveNavbar() {
 }
 
 // initialize aos library for onscroll animations
- AOS.init();
+AOS.init();
 
 // background of navbar on scroll
 $(document).scroll(function () {

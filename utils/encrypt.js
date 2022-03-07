@@ -36,8 +36,8 @@ const checkHash = async (t, h) => {
 };
 
 module.exports = {
-    genSalt : genSalt,
-    genHash : genHash,
-    checkHash : checkHash
+    genSalt: genSalt,
+    genHash: genHash,
+    checkHash: checkHash
 };
  
