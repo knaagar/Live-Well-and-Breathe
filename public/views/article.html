@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+
+<html lang="en">
+	<head>
+	  <meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="icon" type="image/jpg" href="/resources/images/favicon.jpg" />
+		<link href="/styles/style.css" rel="stylesheet" type="text/css" />
+	  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+		<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+		<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+		<link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+	  <title>Article 1</title>
+	  <script>
+		  $(function(){
+	      $("#importNavbar").load(document.cookie ? "/resources/navbar2.html" : "/resources/navbar1.html"); 
+	      $("#importFooter").load("/resources/footer.html");
+	    });
+		</script>
+	</head>
+	<body>
+		<div id="importNavbar"></div>
+		
+	  <div class="landing" id="art1-land">
+			<div class="left-div">
+				<h1 class="text-str" id="title"></h1>
+				<h3 class="text-str" id="author"></h3>
+	    </div>
+	  </div>
+	  
+	  <div class="white-container">
+	    <br><br>
+	    <article id="article"></article>
+	    <br><br>
+		</div>
+		
+	  <script src="/scripts/script.js"></script>
+
+		<script>
+			const title = document.querySelector("#title");
+			const author = document.querySelector("#author");
+			const article = document.querySelector("#article");
+
+			fetch(`/api/article/${window.location.href.replace(/^[\s\S]+\/article\//, "")}`)
+			.then(response => response.json())
+			.then(async data => {
+				if(data.error) {
+					article.innerHTML = `<h1>There was an error loading the article</h1>`;
+					return;
+				}
+
+				title.textContent = data.name;
+				author.textContent = "By: " + data.userName;
+				article.innerHTML = data.content;
+				
+				if(data.userName === (await fetch("/api/user").then(response => response.json())).name) {
+					article.innerHTML += `
+						<br><br>
+						<form action="/api/article/delete/${data._id}" method="POST">
+							<button type="submit" class="add" style="border-radius: 10px; outline: none; border:none; cursor: pointer; background-color: red !important; font-size: 1em; padding: 5px;">Delete</button>
+						</form>`;
+				}
+			});
+		</script>
+	</body>
+</html>

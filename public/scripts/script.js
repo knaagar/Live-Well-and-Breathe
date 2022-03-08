@@ -55,7 +55,7 @@ function erase() {
 }
 
 document.addEventListener("DOMContentLoaded", function() {
-  if(textArray.length){
+  if(textArray.length	&& textToType && cursorC) {
      setTimeout(type, 2000);
   }
 });

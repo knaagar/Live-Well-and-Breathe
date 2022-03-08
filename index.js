@@ -125,6 +125,7 @@ pages.get("/self-care/article1", (req, res) => res.sendFile(__dirname + "/public
 pages.get("/self-care/article2", (req, res) => res.sendFile(__dirname + "/public/views/article2.html"));
 pages.get("/self-care/article3", (req, res) => res.sendFile(__dirname + "/public/views/article3.html"));
 pages.get("/meditate", (req, res) => res.sendFile(__dirname + "/public/views/meditate.html"));
+pages.get("/article/:user/:name/:index", (req, res) => res.sendFile(__dirname + "/public/views/article.html"));
 
 
 // api routing
@@ -629,7 +630,10 @@ api.get("/article/:user/:name/:index", async (req, res) => {
         if(err) console.error(err);
 
 				const onlyUser = results.filter(v => v.user.str === user._id.str);
-				const article = onlyUser[index];
+				const article = onlyUser[index] ? {
+					userName: user.name,
+					...onlyUser[index]
+				} : false;
 
         res.json(article || { error: "No article found" });
     });
