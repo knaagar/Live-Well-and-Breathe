@@ -41,6 +41,8 @@
   	  			<form action = "/api/add-art" method = "POST" enctype = "multipart/form-data">
   						<h1>Add an article</h1>
     					<input required type = "text" name = "name" placeholder = "Name" class="df">
+              <br>
+            <input id="u" required type = "text" name = "user" readonly class="df">
     					<br>
     					<input required type="hidden" name="content" id="content" placeholder="Write your content..." class="df">
 							<trix-editor input="content"></trix-editor>
@@ -60,7 +62,8 @@
 	    form.onsubmit = e => {
 	      let data = new FormData(form),
 	          name = data.get("name"),
-	          content = data.get("content");
+	          content = data.get("content"),
+            user = data.get("user")
 	    };
 	  </script>
 	  <script>
@@ -94,6 +97,7 @@
 	    .then(response => response.json())
 	    .then(data => {
 	      topName.textContent = data.name;
+        document.getElementById("u").value = data.name;
 	    });
 	  </script>
 	

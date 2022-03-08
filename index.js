@@ -12,6 +12,7 @@ const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const { MongoClient } = require('mongodb');
 const sanitizeHtml = require("sanitize-html");
+const ObjectId = require('mongodb').ObjectId;
 
 
 // load in local modules
@@ -207,7 +208,8 @@ api.post("/add-art", (req, res) => {
   const post = {
     name: body.name,
     content: sanitized,
-    created: new Date()
+    created: new Date(),
+    user: body.user
   };
 
   articles.collection("posts").insertOne(post);
@@ -437,6 +439,13 @@ api.get("/update-token", (req, res) => {
         res.status(204).send("Token updated");
     }
 });
+
+api.post('/article/delete/:id', (req, res) => {
+  const params = req.params;
+  let id = params.id;
+  articles.collection("posts").deleteOne({ "_id" : ObjectId(id) })
+  res.redirect('/pages/self-care');
+})
 
 api.post("/delete-account", (req, res) => {
     const body = req.body;

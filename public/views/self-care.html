@@ -29,6 +29,7 @@
       <a class="add" href="/pages/dashboard">Back to Dashboard</a>
       <a class="add" style="float: right;" href="/pages/add-art">Add your own article!</a>
     <br><br><br>
+      <div style="display:none;" id="top-name"></div>
 
 
 	<div class="shape-blob"></div>
@@ -105,28 +106,35 @@
       fetch("/api/user")
       .then(response => response.json())
       .then(data => {
-          topName.textContent = data.name;
+          document.getElementById("top-name").innerText = data.name;
           
       });
 
     let articles = document.getElementById("byusers");
+  
     fetch("/api/articles")
       .then(response => response.json())
       .then(data => {
+        
         for(let i = 0; i < data.length; i++) {
           let el = document.createElement('article');
+          
           el.innerHTML = `
       <div>
       <div class="text">
         <h3>${data[i].name}</h3>
-        <p>${data[i].content.substr(0, 40)}...</p>
+        <p>${data[i].content.substr(0, 40)}...<br> <span style="text-decoration: underline;">Written by ${data[i].user}</span></p>
 
         <br>
             <a class="btn btn-primary btn-block" 
- href="javascript:openModal('${data[i].content}', '${data[i].name}')">Read more</a>
+ href="javascript:openModal('${data[i].content}', '${data[i].name}')">Read more</a><br><br>
+            ${data[i].user === document.getElementById("top-name").innerText ? `<form action="/api/article/delete/${data[i]._id}" method="POST">
+              <button type="submit" class="add" style="border-radius: 10px;outline: none; border:none; cursor: pointer; background-color: red !important; font-size: 1em;">Delete</button>
+            </form>` : ''}
       </div>
       </div>
     `;
+          
           articles.appendChild(el);
         }
           
@@ -145,7 +153,7 @@
           modal.style.display = "none";
         }
       }
-      document.getElementById("thing").innerText = content;
+      document.getElementById("thing").innerHTML = content;
       document.getElementById("title").innerText = title;
     }
 
