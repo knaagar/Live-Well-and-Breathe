@@ -201,15 +201,21 @@ api.post("/sign-up", (req, res) => {
 });
 
 api.post("/add-art", (req, res) => {
+	if(!req.loggedIn) {
+		res.redirect("/pages/sign-up");
+		return;
+	}
+	
   const body = req.body;
   const html = body.content;
   const sanitized = sanitizeHtml(html);
 
   const post = {
     name: body.name,
+		urlName: encodeURIComponent(body.name),
     content: sanitized,
     created: new Date(),
-    user: body.user
+    user: ObjectId(req.loggedIn._id)
   };
 
   articles.collection("posts").insertOne(post);
@@ -441,9 +447,14 @@ api.get("/update-token", (req, res) => {
 });
 
 api.post('/article/delete/:id', (req, res) => {
+	if(!req.loggedIn) {
+		res.redirect("/pages/sign-up");
+		return;
+	}
+	
   const params = req.params;
   let id = params.id;
-  articles.collection("posts").deleteOne({ "_id" : ObjectId(id) })
+  articles.collection("posts").deleteOne({ "_id" : ObjectId(id), "user": ObjectId(req.loggedIn._id) })
   res.redirect('/pages/self-care');
 })
 
@@ -595,10 +606,32 @@ api.get("/foods", (req, res) => {
 });
 
 api.get("/articles", (req, res) => {
-    articles.collection("posts").find({ }).toArray(function(err, results) {
+    articles.collection("posts").find({ }).toArray(async function(err, results) {
         if(err) console.error(err);
 
-        res.json(results);
+				const withAuthors = await Promise.all(results.map(async v => {
+					v.user = (await users.collection("accounts").findOne({ _id: ObjectId(v.user) })).name;
+
+					return v;
+				}));
+
+        res.json(withAuthors);
+    });
+});
+
+api.get("/article/:user/:name/:index", async (req, res) => {
+		const params = req.params;
+		const user = (await users.collection("accounts").find({ }).toArray()).filter(v => v.name === params.user)[0];
+		const name = params.name;
+		const index = params.index;
+		
+    articles.collection("posts").find({ urlName: name }).toArray(async function(err, results) {
+        if(err) console.error(err);
+
+				const onlyUser = results.filter(v => v.user.str === user._id.str);
+				const article = onlyUser[index];
+
+        res.json(article || { error: "No article found" });
     });
 });
 

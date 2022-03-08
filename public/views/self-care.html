@@ -118,6 +118,10 @@
         
         for(let i = 0; i < data.length; i++) {
           let el = document.createElement('article');
+
+					const encodedName = encodeURIComponent(data[i].name);
+					const sameNames = data.filter(v => encodeURIComponent(v.name) === encodedName);
+					const indexOfSameNames = sameNames.map((v, i) => v._id === data[i]._id ? i : false).filter(v => v)[0];
           
           el.innerHTML = `
       <div>
@@ -127,7 +131,7 @@
 
         <br>
             <a class="btn btn-primary btn-block" 
- href="javascript:openModal('${data[i].content}', '${data[i].name}')">Read more</a><br><br>
+ href="/api/article/${encodeURIComponent(data[i].user)}/${encodedName}/${indexOfSameNames || "0"}">Read more</a><br><br>
             ${data[i].user === document.getElementById("top-name").innerText ? `<form action="/api/article/delete/${data[i]._id}" method="POST">
               <button type="submit" class="add" style="border-radius: 10px;outline: none; border:none; cursor: pointer; background-color: red !important; font-size: 1em;">Delete</button>
             </form>` : ''}
