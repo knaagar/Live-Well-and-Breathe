@@ -21,8 +21,11 @@
 	<body>
 		<div id="importNavbar"></div>
 		
-	  <div class="landing" id="art1-land">
-			<div class="left-div">
+	  <div class="top-land" id="art11-land">
+      <div class="shape-blob"></div>
+	    <div class="shape-blob one"></div>
+	    <div class="shape-blob two"></div>
+			<div class="left-div" id="middle">
 				<h1 class="text-str" id="title"></h1>
 				<h3 class="text-str" id="author"></h3>
 	    </div>
@@ -57,7 +60,7 @@
 					article.innerHTML += `
 						<br><br>
 						<form action="/api/article/delete/${data._id}" method="POST">
-							<button type="submit" class="add" style="border-radius: 10px; outline: none; border:none; cursor: pointer; background-color: red !important; font-size: 1em; padding: 5px;">Delete</button>
+							<button type="submit" class="add" style="border-radius: 10px; outline: none; border:none; cursor: pointer; background-color: red !important; font-size: 1em; padding: 5px; color: #fff;">Delete</button>
 						</form>`;
 				}
 			});
