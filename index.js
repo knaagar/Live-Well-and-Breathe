@@ -213,7 +213,7 @@ api.post("/add-art", (req, res) => {
 
   const post = {
     name: body.name,
-		urlName: encodeURIComponent(body.name),
+		urlName: body.name.replace(/ +/gi, '_'),
     content: sanitized,
     created: new Date(),
     user: ObjectId(req.loggedIn._id)

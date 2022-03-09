@@ -110,7 +110,7 @@
         for(let i = 0; i < data.length; i++) {
           let el = document.createElement('article');
 
-					const encodedName = encodeURIComponent(data[i].name);
+					const encodedName = data[i].name.replace(/ +/gi, '_');
 					const sameNames = data.filter(v => encodeURIComponent(v.name) === encodedName);
 					const indexOfSameNames = sameNames.map((v, i) => v._id === data[i]._id ? i : false).filter(v => v)[0];
           
