@@ -527,3 +527,7 @@ select.form-control:not([size]):not([multiple]) {
   padding: 10px;
   text-decoration: none;
 }
+
+.form-content button:not(.form-btn) {
+  background-color: #e9b359 !important;
+}
