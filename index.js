@@ -14,7 +14,6 @@ const { MongoClient } = require('mongodb');
 const sanitizeHtml = require("sanitize-html");
 const ObjectId = require('mongodb').ObjectId;
 
-
 // load in local modules
 
 const { genSalt, genHash, checkHash } = require("./utils/encrypt.js");
