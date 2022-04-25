@@ -103,7 +103,7 @@ function onTimer() {
     alert('Done!');
     document.getElementById("textt").innerHTML = "You have completed one minute of meditation.";
     confetti();
-    
+    setTimeout(window.location.reload(), 3500);
   }
   else {
     setTimeout(onTimer, 1000);
