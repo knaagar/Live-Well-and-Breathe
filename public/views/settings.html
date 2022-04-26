@@ -74,21 +74,12 @@
       }
 
       let topName = document.getElementById("top-name");
-      // let name2 = document.getElementById("nameish");
-      // let date = document.getElementById("createdate");
-      // let mail = document.getElementById("mail");
-      // let age = document.getElementById("aget");
-      // let gn = document.getElementById("gn");
 
       fetch("/api/user")
       .then(response => response.json())
       .then(data => {
           topName.textContent = data.name;
-          // name2.textContent = data.name;
-          // date.textContent = data.created.split("T")[0];
-          // mail.textContent = data.email;
-          // age.textContent = data.age;
-          // gn.textContent = data.goals.length;
+          
       });
  
   </script>

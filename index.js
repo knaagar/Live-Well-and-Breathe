@@ -251,7 +251,7 @@ api.post("/login", (req, res) => {
                     const token = jwt.sign(result, process.env.TOKEN_SECRET);
 
                     res.cookie("token", token);
-                    res.redirect("/pages/home");
+                    res.redirect("/pages/dashboard");
                 } else {
                     res.status(403).redirect("/pages/login");
                 }
